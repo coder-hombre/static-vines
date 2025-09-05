@@ -1,0 +1,13 @@
+{
+  "itemGroup.staticvines": "Example Mod Tab",
+  "block.staticvines.example_block": "Example Block",
+  "item.staticvines.example_item": "Example Item",
+
+  "staticvines.configuration.title": "Static Vines Configs",
+  "staticvines.configuration.section.staticvines.common.toml": "Static Vines Configs",
+  "staticvines.configuration.section.staticvines.common.toml.title": "Static Vines Configs",
+  "staticvines.configuration.items": "Item List",
+  "staticvines.configuration.logDirtBlock": "Log Dirt Block",
+  "staticvines.configuration.magicNumberIntroduction": "Magic Number Text",
+  "staticvines.configuration.magicNumber": "Magic Number"
+}
