@@ -50,6 +50,10 @@ This mod is designed to work alongside other mods without conflicts. It specific
 - **Issues**: [GitHub Issues](https://github.com/foogly/static-vines/issues)
 - **Homepage**: [GitHub Repository](https://github.com/foogly/static-vines)
 
+## Contributions
+
+If you want to contribute changes to the mod, fork it and submit a PR.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
