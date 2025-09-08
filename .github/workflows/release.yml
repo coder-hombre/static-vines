@@ -7,6 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: bot
     
     steps:
     - name: Generate GitHub App Token
