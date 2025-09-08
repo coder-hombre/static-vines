@@ -114,26 +114,3 @@ jobs:
         git add gradle.properties
         git commit -m "Bump version to ${{ steps.new_version.outputs.version }} (${{ steps.new_version.outputs.bump_type }})"
         git push
-        
-    - name: Create Git tag
-      run: |
-        git tag "v${{ steps.new_version.outputs.version }}"
-        git push origin "v${{ steps.new_version.outputs.version }}"
-        
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
-      env:
-        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-      with:
-        tag_name: "v${{ steps.new_version.outputs.version }}"
-        release_name: "Release v${{ steps.new_version.outputs.version }}"
-        body: |
-          Auto-generated release for version ${{ steps.new_version.outputs.version }}
-          
-          **Changes:** ${{ steps.new_version.outputs.bump_type }} version bump
-          
-          **Merged PR:** ${{ github.event.pull_request.title }} (#${{ github.event.pull_request.number }})
-          
-          Download the JAR file from the assets below and drop it into your mods folder.
-        draft: false
-        prerelease: false
