@@ -7,7 +7,7 @@ on:
     branches: [main, master]
 
 env:
-  private-key: ${{ secrets.APP_PRIVATE_KEY }}
+  private-key: ${{secrets.APP_PRIVATE_KEY}}
   app-id: ${{ vars.APP_ID }}
 
 jobs:
@@ -21,13 +21,13 @@ jobs:
     steps:
     - name: testVariables
       run: echo "set to $private_key"
-       
+
     - name: Generate GitHub App Token
       id: app-token
       uses: actions/create-github-app-token@v1
       with:
-        app-id: $app-id
-        private-key: $private-key
+        app-id: ${{ vars.APP_ID }}
+        private-key: ${{ secrets.APP_PRIVATE_KEY }}
         
     - name: Checkout code
       uses: actions/checkout@v4
