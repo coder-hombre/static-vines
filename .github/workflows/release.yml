@@ -8,6 +8,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment: bot
+    permissions:
+      actions: read|write
+      pull-requests: read|write
     
     steps:
     - name: Generate GitHub App Token
