@@ -35,6 +35,10 @@ jobs:
         token: ${{ steps.app-token.outputs.token }}
         fetch-depth: 0
         
+    - name: Set remote URL with app token
+      run: |
+        git remote set-url origin https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}
+
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
