@@ -1,0 +1,117 @@
+name: Auto Version Bump
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main, master]
+
+jobs:
+  version-bump:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+        
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+      
+    - name: Get current version
+      id: current_version
+      run: |
+        CURRENT_VERSION=$(grep "mod_version=" gradle.properties | cut -d'=' -f2)
+        echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+        
+    - name: Determine version bump type
+      id: bump_type
+      run: |
+        PR_TITLE="${{ github.event.pull_request.title }}"
+        PR_BODY="${{ github.event.pull_request.body }}"
+        PR_LABELS="${{ join(github.event.pull_request.labels.*.name, ' ') }}"
+        
+        # Check for breaking changes or major version indicators
+        if echo "$PR_TITLE $PR_BODY $PR_LABELS" | grep -iE "(breaking|major|BREAKING CHANGE)" > /dev/null; then
+          echo "type=major" >> $GITHUB_OUTPUT
+        # Check for features or minor version indicators  
+        elif echo "$PR_TITLE $PR_BODY $PR_LABELS" | grep -iE "(feat|feature|minor|enhancement)" > /dev/null; then
+          echo "type=minor" >> $GITHUB_OUTPUT
+        # Default to patch for bug fixes and other changes
+        else
+          echo "type=patch" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Calculate new version
+      id: new_version
+      run: |
+        CURRENT="${{ steps.current_version.outputs.current }}"
+        BUMP_TYPE="${{ steps.bump_type.outputs.type }}"
+        
+        # Parse current version (assuming semantic versioning: X.Y.Z)
+        IFS='.' read -ra VERSION_PARTS <<< "$CURRENT"
+        MAJOR=${VERSION_PARTS[0]}
+        MINOR=${VERSION_PARTS[1]}
+        PATCH=${VERSION_PARTS[2]}
+        
+        case $BUMP_TYPE in
+          "major")
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+            ;;
+          "minor")
+            MINOR=$((MINOR + 1))
+            PATCH=0
+            ;;
+          "patch")
+            PATCH=$((PATCH + 1))
+            ;;
+        esac
+        
+        NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+        echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
+        
+    - name: Update version in gradle.properties
+      run: |
+        sed -i "s/mod_version=.*/mod_version=${{ steps.new_version.outputs.version }}/" gradle.properties
+        
+    - name: Commit version bump
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add gradle.properties
+        git commit -m "Bump version to ${{ steps.new_version.outputs.version }} (${{ steps.new_version.outputs.bump_type }})"
+        git push
+        
+    - name: Create Git tag
+      run: |
+        git tag "v${{ steps.new_version.outputs.version }}"
+        git push origin "v${{ steps.new_version.outputs.version }}"
+        
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: "v${{ steps.new_version.outputs.version }}"
+        release_name: "Release v${{ steps.new_version.outputs.version }}"
+        body: |
+          Auto-generated release for version ${{ steps.new_version.outputs.version }}
+          
+          **Changes:** ${{ steps.new_version.outputs.bump_type }} version bump
+          
+          **Merged PR:** ${{ github.event.pull_request.title }} (#${{ github.event.pull_request.number }})
+          
+          Download the JAR file from the assets below and drop it into your mods folder.
+        draft: false
+        prerelease: false
