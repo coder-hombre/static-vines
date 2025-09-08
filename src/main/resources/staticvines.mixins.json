@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.foogly.staticvines.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "staticvines.refmap.json",
+  "mixins": [
+    "StaticVinesMixin"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

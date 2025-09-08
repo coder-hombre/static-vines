@@ -7,7 +7,7 @@ import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
+
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -37,23 +37,17 @@ public class StaticVines {
         // Register ourselves for server and other game events we are interested in
         NeoForge.EVENT_BUS.register(this);
 
-        // Register the vine growth handler for event processing
-        NeoForge.EVENT_BUS.register(VineGrowthHandler.class);
+        // Vine growth prevention is handled by mixins
 
-        // Register our mod's configuration so that FML can create and load the config file for us
-        modContainer.registerConfig(ModConfig.Type.COMMON, VineConfig.SPEC);
+        // No configuration needed - mixins handle everything
         
-        LOGGER.info("Static Vines mod initialized - vine growth prevention system loaded");
+        LOGGER.info("Static Vines mod initialized - vine and cave vine random ticking disabled via mixins");
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
         // Common setup code for vine growth prevention
         LOGGER.info("Static Vines mod common setup complete");
-        LOGGER.info("Vine growth event handler registered and active");
-        
-        // Log current configuration settings
-        LOGGER.info("Vine growth prevention enabled: {}", VineConfig.PREVENT_VINE_GROWTH.get());
-        LOGGER.info("Cave vine growth prevention enabled: {}", VineConfig.PREVENT_CAVE_VINE_GROWTH.get());
+        LOGGER.info("Random ticking disabled for vines and cave vines");
     }
 
     /**
@@ -61,6 +55,6 @@ public class StaticVines {
      */
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        LOGGER.info("Static Vines mod active on server - vine growth prevention system ready");
+        LOGGER.info("Static Vines mod active on server - vine and cave vine random ticking disabled");
     }
 }

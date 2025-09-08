@@ -1,33 +1,25 @@
 # Static Vines
 
-A NeoForge mod for Minecraft 1.21.1 that prevents vines and cave vines from naturally growing and spreading while preserving manual placement functionality.
+A simple NeoForge mod for Minecraft 1.21.1 that disables random ticking for vines and cave vines, preventing them from growing naturally.
 
 ## Features
 
-- **Vine Growth Prevention**: Stops regular vines from growing and spreading naturally
-- **Cave Vine Control**: Prevents cave vines from growing downward naturally  
-- **Configurable Controls**: Individual settings for each vine type with runtime configuration reloading
+- **Simple Implementation**: Disables random ticking for vine blocks to prevent growth
+- **Covers All Vine Types**: Prevents growth for regular vines, cave vines, and cave vine plants
 - **Manual Placement Preserved**: Players can still manually place and use vines normally
-- **Performance Optimized**: No impact on gameplay performance or server lag
+- **Lightweight**: Minimal performance impact using direct random tick cancellation
 - **Server Compatible**: Works seamlessly in multiplayer environments
 
-## Configuration
+## How It Works
 
-The mod automatically creates a configuration file at `config/staticvines-common.toml` with the following options:
+The mod uses Mixin to directly override the `randomTick` method for all vine block types:
+- `VineBlock` (regular vines)
+- `CaveVinesBlock` (cave vine main blocks)
+- `CaveVinesPlantBlock` (cave vine plant blocks)
 
-```toml
-[vine_growth_prevention]
-# Prevent regular vines from growing and spreading
-prevent_vine_growth = true
+By making these methods do nothing, vine blocks can no longer grow or spread naturally. This is the most direct and efficient way to prevent vine growth.
 
-# Prevent cave vines from growing downward
-prevent_cave_vine_growth = true
-```
-
-**Configuration Features:**
-- Changes are applied immediately without requiring a restart
-- Set individual vine types to `false` to allow normal vanilla growth
-- Set to `true` to completely prevent growth attempts for that vine type
+No configuration is needed - the mod automatically disables random ticking for all vine types.
 
 ## Installation
 
@@ -43,7 +35,7 @@ prevent_cave_vine_growth = true
 
 ## Compatibility
 
-This mod is designed to work alongside other mods without conflicts. It specifically targets vine growth mechanics while preserving all other vanilla functionality.
+This mod is designed to work alongside other mods without conflicts. It only affects the random ticking behavior of vine blocks and doesn't modify any other game mechanics.
 
 ## Support
 

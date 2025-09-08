@@ -7,8 +7,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.gui.ConfigurationScreen;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+// No configuration screen imports needed
 
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
 @Mod(value = StaticVines.MODID, dist = Dist.CLIENT)
@@ -16,16 +15,12 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 @EventBusSubscriber(modid = StaticVines.MODID, value = Dist.CLIENT)
 public class StaticVinesClient {
     public StaticVinesClient(ModContainer container) {
-        // Allows NeoForge to create a config screen for this mod's configs.
-        // The config screen is accessed by going to the Mods screen > clicking on your mod > clicking on config.
-        // Do not forget to add translations for your config options to the en_us.json file.
-        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        // No configuration screen needed - mod works automatically
     }
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
-        // Some client setup code
-        StaticVines.LOGGER.info("HELLO FROM CLIENT SETUP");
-        StaticVines.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+        // Client setup for Static Vines mod
+        StaticVines.LOGGER.info("Static Vines client setup complete");
     }
 }
