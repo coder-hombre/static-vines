@@ -12,7 +12,7 @@ jobs:
     environment: bot
     permissions:
       actions: write
-      pull-request: write
+      pull-requests: write
     
     steps:
     - name: Generate GitHub App Token
