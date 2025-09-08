@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Mixin to disable random ticking for cave vine blocks
+ * Mixin to disable random ticking for cave and weeping vine blocks
  */
 @Mixin(GrowingPlantHeadBlock.class)
 public class StaticVinesMixin {
